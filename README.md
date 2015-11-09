@@ -18,7 +18,7 @@ SPLIT : \,
 SE    : \;
 ```
 Notice:
-1. The defination of 'NUM' allows zeros as the start, and no decimal numbers.
+1. The defination of 'NUM' allows zeros as the start, and no decimal numbers.  
 2. NUM and ID will be limited in 8 characters, if exceed, errors will occur.  
 注意：  
 1. NUM定义上允许先导0, 且不支持小数。  
