@@ -15,7 +15,7 @@ MULOP : [*/]
 ADDOP : [+-]
 AGN   : =
 SPLIT : \,
-SE    : \;
+SE    : [;]
 ```
 Notice:  
 1. The defination of 'NUM' allows zeros as the start, and no decimal numbers.  
@@ -62,3 +62,10 @@ expression:
 | NUM
 ;
 ```
+
+## Compile Options
+`-lfl` is needed when compiling `lex.yy.c`.
+
+## Flex and Bison
+Some examples from the book **flex & bison**.  
+**flex与bison**一书的一些示例代码。  
