@@ -31,16 +31,14 @@ program:
   compound
 ;
 
-/* error here is a reserved word. */
-/* error recovery will happen and continue parsing */
 compound:
   %empty
-| declaration assignstatement compound
+  | declaration assignstatement compound
 ;
 
 declaration:
   %empty
-| VAR identifier_list SE
+  | VAR identifier_list SE
 ;
 
 identifier_list:
@@ -50,16 +48,16 @@ identifier_list:
 
 assignstatement:
   %empty
-| ID AGN expression SE
+  | ID AGN expression SE
 ;
 
 expression:
   expression ADDOP expression
-| expression MULOP expression
-| expression POWER expression
-| LB expression RB
-| ID
-| NUM
+  | expression MULOP expression
+  | expression POWER expression
+  | LB expression RB
+  | ID
+  | NUM
 ;
 ```
 
