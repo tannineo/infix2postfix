@@ -4,6 +4,8 @@
 
   int yylex (void);
   void yyerror(char const*, ...);
+  // 是否有错误的标志
+  // 从出现错误开始后面的后缀表达式结果一概不输出
   int flag = 0;
 %}
 
@@ -26,14 +28,14 @@ program:
   | compound END { printf("Compiling End...\n"); exit(0); }
 ;
 
+/* error 用来进行错误恢复 */
+/* 出错相当于直接跳过这条语句，即下个符号读 ; */
 compound:
   | declaration compound {}
   | assignstatement compound {}
   | error compound {}
 ;
 
-  /* error 用来进行错误恢复 */
-  /* 出错相当于直接跳过这条语句，即下个符号读 ; */
 declaration: VAR identifier_list ';' {}
 ;
 
@@ -75,7 +77,6 @@ expression:
   | expression MULOP expression { $$ = strcomb($1, $3, $2); }
   | expression '^' expression { $$ = strcomb($1, $3, "^"); }
   | '(' expression ')' { $$ = $2; }
-  /* 默认 $$ = $1 */
   | ID  {
     if(!lookup($1)) {
       yyerror("%s No Defination!", $1);

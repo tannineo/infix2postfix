@@ -119,7 +119,7 @@ char* addid(char* sym) {
 void yyerror(char *s, ...) {
   va_list ap;
   va_start(ap, s);
-
+  // yylineno 于自动生成的头文件中定义，返回当前位置的行号
   fprintf(stderr, "%d: error: ", yylineno);
   vfprintf(stderr, s, ap);
   fprintf(stderr, "\n");
@@ -129,7 +129,6 @@ int main(int argc, char** argv){
   if(argc < 2) {
     printf("need filename\n"); return 1;
   }
-
   if(argc > 2) {
     printf("only ONE file required\n"); return 1;
   }

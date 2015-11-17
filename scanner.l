@@ -7,7 +7,7 @@
 
 %%
   /* 变量声明 */
-var { /*printf("found VAR!\n");*/ return VAR; }
+var { return VAR; }
 
   /* 变量名 */
 [A-Za-z][A-Za-z0-9]* { yylval.str = newstr(yytext); return ID; }
@@ -22,7 +22,7 @@ var { /*printf("found VAR!\n");*/ return VAR; }
 [*/] { yylval.str = newstr(yytext); return MULOP; }
 
   /* 直接返回的符号 */
-[(),;^=] { /*printf("found %s !\n", yytext);*/ return yytext[0]; }
+[(),;^=] { return yytext[0]; }
 
   /* 将其他字符视为空格 */
 .
