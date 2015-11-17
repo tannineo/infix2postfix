@@ -8,14 +8,8 @@ a homework of Compilers, change infix expressions into postfix ones.
 VAR   : var
 ID    : [A-Za-z][A-Za-z0-9]*
 NUM   : [0-9]+
-LB    : \(
-RB    : \)
-POWER : \^
 MULOP : [*/]
 ADDOP : [+-]
-AGN   : =
-SPLIT : \,
-SE    : [;]
 ```
 Notice:  
 1. The defination of 'NUM' allows zeros as the start, and no decimal numbers.  
@@ -38,24 +32,24 @@ compound:
 
 declaration:
   %empty
-  | VAR identifier_list SE
+  | VAR identifier_list ';'
 ;
 
 identifier_list:
   %empty
-| ID SPLIT identifier_list
+  | ID ',' identifier_list
 ;
 
 assignstatement:
   %empty
-  | ID AGN expression SE
+  | ID '=' expression ';'
 ;
 
 expression:
   expression ADDOP expression
   | expression MULOP expression
-  | expression POWER expression
-  | LB expression RB
+  | expression '^' expression
+  | '(' expression ')'
   | ID
   | NUM
 ;

@@ -86,7 +86,7 @@ struct symbol* lookup(char* sym) {
   }
 
   fputs("symbol table overflow\n", stderr);
-  abort(); /* 所有条目都是过了，符号表已满 */
+  abort(); /* 所有条目都试过了，符号表已满 */
 }
 
 void addref(int lineno, char *filename, char *word, int flags) {
