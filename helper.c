@@ -18,7 +18,7 @@ char* newnum(char* yyInText) {
     yyerror("newnum: out of space"); abort();
   }
 
-  printf("newnum: %s\n", p);
+  //printf("newnum: %s\n", p);
   return p;
 }
 
@@ -29,7 +29,7 @@ char* newstr(char* yyInText) {
     yyerror("newstr: out of space"); abort();
   }
   p = strdup(yyInText);
-  printf("newstr: %s\n", p);
+  //printf("newstr: %s\n", p);
   return p;
 }
 
@@ -62,7 +62,7 @@ char* strcomb(char* op1, char* op2, char* opt) {
   while(*p++ = *tmp++);
   p-=ttlLen;
 
-  printf("strcomb: %s\n", p);
+  //printf("strcomb: %s\n", p);
   return p;
 }
 
@@ -75,29 +75,37 @@ static unsigned idhash(char* sym) {
   while(c = *sym++) hash = hash*9 ^ c;
   return hash;
 }
-// HASH查找
+// HASH查找 if exist output
 char* lookup(char* sym) {
-  char* sp = idtab[idhash(sym)%NHASH];
+  char** sp = &idtab[idhash(sym)%NHASH];
   int scount = NHASH; /* 查找次数 */
 
+
   while(--scount >= 0) {
-    if(sp && !strcmp(sp, sym)) return sp;
+    if(*sp && !strcmp(*sp, sym)) {
+      //printf("same found\n");
+      return *sp;
+    }
     if(++sp >= idtab+NHASH) sp = idtab; /* 尝试下一个条目 */
   }
+  //printf("HASH OK\n");
   return NULL;/* 所有条目都试过了 */
 }
-
 // HASH添加
 char* addid(char* sym) {
-  char* sp = idtab[idhash(sym)%NHASH];
+  char** sp = &idtab[idhash(sym)%NHASH];
   int scount = NHASH; /* 查找次数 */
 
   while(--scount >= 0) {
-    if(sp && !strcmp(sp, sym)) return NULL; /* 重复变量声明 */
+    if(*sp && !strcmp(*sp, sym)) {
+      //printf("same found\n");
+      return NULL;
+    }/* 重复变量声明 */
 
-    if(!sp) { /* 新条目 */
-      sp = strdup(sym);
-      return sp;  /* 返回位置 */
+    if(!*sp) { /* 新条目 */
+      *sp = strdup(sym);
+      //printf("new id %s logged!\n", *sp);
+      return *sp;  /* 返回位置 */
     }
 
     if(++sp >= idtab+NHASH) sp = idtab; /* 尝试下一个条目 */

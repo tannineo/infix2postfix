@@ -3,7 +3,8 @@
   #include <math.h>
 
   int yylex (void);
-  void yyerror(char const*);
+  void yyerror(char const*, ...);
+  int flag = 0;
 %}
 
 %union {
@@ -21,26 +22,52 @@
 %left '^'
 
 %%
-program: %empty
-  | compound END { printf("end...\n"); exit(0); }
+program:
+  | compound END { printf("Compiling End...\n"); exit(0); }
 ;
 
-compound: %empty
-  | declaration assignstatement compound {  }
+compound:
+  | declaration compound {}
+  | assignstatement compound {}
+  | error compound {}
 ;
 
   /* error 用来进行错误恢复 */
   /* 出错相当于直接跳过这条语句，即下个符号读 ; */
-declaration: %empty
-  | VAR identifier_list ';' { printf("def"); }
+declaration: VAR identifier_list ';' {}
 ;
 
-identifier_list:
-  | ID ',' identifier_list { if(!lookup($1)) { addid($1); } else { printf("redefination!\n"); abort(); } }
+identifier_list: ID {
+    /*printf("%s OK\n", $1);*/
+    if(!lookup($1)) {
+      //printf("Adding %s to idtab...\n", $1);
+      addid($1);
+    } else {
+      yyerror("Redefination!\n");
+      exit(1);
+    }
+  }
+  | ID ',' identifier_list {
+    /*printf("%s OK\n", $1);*/
+    if(!lookup($1)) {
+      //printf("Adding %s to idtab...\n", $1);
+      addid($1);
+    } else {
+      yyerror("Redefination!\n");
+      exit(1);
+    }
+  }
 ;
 
 assignstatement:
-  | ID '=' expression ';' { $$ = strcomb($1, $3, "="); }
+  | ID '=' expression ';' {
+    if(!lookup($1)) {
+      yyerror("%s No Defination!", $1);
+      flag++;
+    }
+    $$ = strcomb($1, $3, "=");
+    if(!flag)printf("%s\n", $$);
+  }
 ;
 
 expression:
@@ -49,6 +76,14 @@ expression:
   | expression '^' expression { $$ = strcomb($1, $3, "^"); }
   | '(' expression ')' { $$ = $2; }
   /* 默认 $$ = $1 */
-  | ID  { $$ = $1; /*check_ifexist();*/ }
+  | ID  {
+    if(!lookup($1)) {
+      yyerror("%s No Defination!", $1);
+      flag++;
+    }
+    $$ = $1;
+  }
   | NUM { $$ = $1; }
 ;
+
+%%
