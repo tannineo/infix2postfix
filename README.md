@@ -12,10 +12,13 @@ MULOP : [*/]
 ADDOP : [+-]
 END   : <<EOF>>
 ```
-Notice:  
-1. The defination of 'NUM' allows zeros as the start, and no decimal numbers.  
-注意：  
-1. NUM定义上允许先导0, 且不支持小数。  
+Notice:
+
+- The defination of 'NUM' allows zeros as the start, and no decimal numbers. 
+
+注意:
+
+- NUM定义上允许先导0, 且不支持小数。  
 
 ## Syntax Analysis & BNF Expression(using bison)
 语法分析与BNF表达式（使用bison，gnu的yacc）  
